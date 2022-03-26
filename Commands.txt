@@ -1,0 +1,53 @@
+minikube start
+-----
+
+kubectl get nodes
+
+Kubernetes control plane is running at https://192.168.49.2:8443
+CoreDNS is running at https://192.168.49.2:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+-----
+
+kubectl create ns redmine
+
+namespace/redmine created
+-----
+
+kubectl config set-context --current --namespace=redmine
+
+Context "minikube" modified.
+-----
+
+kubectl apply -f pvc.yaml
+
+persistentvolumeclaim/pg-storage created
+-----
+
+kubectl get pvc
+-----
+
+kubectl create secret generic pg-secret --from-literal=PASS=rmdbpassword
+-----
+
+kubectl apply -f deployment-pg.yaml
+------
+
+kubectl apply -f service-pg.yaml
+------
+
+kubectl create secret generic redmine-secret --from-literal=KEY=supersecretkey
+------
+
+kubectl apply -f deployment-redmine.yaml
+------
+
+kubectl apply -f ingress.yaml
+-----
+
+kubectl get po
+
+kubectl get svc -A
+-----
+
+Ищем внешний IP для доступа к Redmine в EXTERNAL-IP у сервиса nginx-ingress-controller с типом LoadBalancer
+
+
